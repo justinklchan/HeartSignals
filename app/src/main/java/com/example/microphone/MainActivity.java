@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private int grantResults[];
-    int freq=0;
-    double vol=0;
-    int length=0;
+    int freq = 0;
+    double vol = 0;
+    int length = 0;
     Worker task;
     Activity av;
     TextView tv;
-    int counter=0;
-    String fname="";
+    int counter = 0;
+    String fname = "";
     Vibrator vibrator;
 
     @Override
@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Constants.accx=new ArrayList<>();
                 Constants.accy=new ArrayList<>();
                 Constants.accz=new ArrayList<>();
+                Constants.gyrox=new ArrayList<>();
+                Constants.gyroy=new ArrayList<>();
+                Constants.gyroz=new ArrayList<>();
                 counter=0;
                 Constants.start=true;
             }
@@ -182,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
     }
@@ -201,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (Constants.start) {
-//            if (sensorEvent.sensor.equals(mysensor)) {
+            if (sensorEvent.sensor.equals(accelerometer)) {
                 float x = sensorEvent.values[0];
                 float y = sensorEvent.values[1];
                 float z = sensorEvent.values[2];
@@ -210,7 +214,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Constants.accz.add(z);
                 graphData(new float[]{x,y,z});
 //                gotacc=true;
-//            }
+            }
+            else if (sensorEvent.sensor.equals(gyroscope)) {
+                float x = sensorEvent.values[0];
+                float y = sensorEvent.values[1];
+                float z = sensorEvent.values[2];
+                Constants.gyrox.add(x);
+                Constants.gyroy.add(y);
+                Constants.gyroz.add(z);
+//                graphData(new float[]{x,y,z});
+//                gotacc=true;
+            }
         }
     }
 

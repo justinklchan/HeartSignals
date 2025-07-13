@@ -16,5 +16,8 @@ public class Constants {
     static ArrayList<Float> accx;
     static ArrayList<Float> accy;
     static ArrayList<Float> accz;
+    static ArrayList<Float> gyrox;
+    static ArrayList<Float> gyroy;
+    static ArrayList<Float> gyroz;
     static boolean start=false;
 }
