@@ -31,6 +31,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.os.CountDownTimer;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     static {
@@ -43,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int length = 0;
     Worker task;
     Activity av;
-    TextView tv;
+    TextView tv,countdownField;
     int counter = 0;
     String fname = "";
     Vibrator vibrator;
-
+    CountDownTimer ttimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         av = this;
         tv = (TextView)findViewById(R.id.textView1);
+        countdownField = (TextView)findViewById(R.id.textView4);
 
         Constants.lineChart_imu = (LineChart)findViewById(R.id.linechart_imu);
         Constants.lineChart_mic = (LineChart)findViewById(R.id.linechart_mic);
@@ -87,14 +89,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Constants.startButton.setEnabled(false);
                 Constants.stopButton.setEnabled(true);
 
-                Constants.accx=new ArrayList<>();
-                Constants.accy=new ArrayList<>();
-                Constants.accz=new ArrayList<>();
-                Constants.gyrox=new ArrayList<>();
-                Constants.gyroy=new ArrayList<>();
-                Constants.gyroz=new ArrayList<>();
+                String s = Constants.lengthEt.getText().toString();
+                int size = 500*Integer.parseInt(s);
+                Constants.accx=new ArrayList<>(size);
+                Constants.accy=new ArrayList<>(size);
+                Constants.accz=new ArrayList<>(size);
+                Constants.gyrox=new ArrayList<>(size);
+                Constants.gyroy=new ArrayList<>(size);
+                Constants.gyroz=new ArrayList<>(size);
                 counter=0;
                 Constants.start=true;
+
+                ttimer=new CountDownTimer((Integer.parseInt(s)) * 1000, 100) {
+
+                    public void onTick(long millisUntilFinished) {
+                        countdownField.setText(1 + (millisUntilFinished / 1000) + "");
+                    }
+
+                    public void onFinish() {
+                        countdownField.setText("0");
+                        Constants.start=false;
+                    }
+                }.start();
             }
         });
         Constants.stopButton.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 FileOperations.writetofile(av,fname);
 
                 Constants.start=false;
+                ttimer.cancel();
             }
         });
 

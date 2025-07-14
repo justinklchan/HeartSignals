@@ -22,18 +22,32 @@ public class FileOperations {
                     }
                     File file = new File(dir, fname+"-acc.txt");
                     BufferedWriter outfile = new BufferedWriter(new FileWriter(file,false));
+                    int total = Constants.accx.size();
+                    int lastLoggedPercent = -1;
                     for (int i = 0; i < Constants.accx.size(); i++) {
                         outfile.append(Constants.accx.get(i)+","+Constants.accy.get(i)+","+Constants.accz.get(i));
                         outfile.newLine();
+                        int percent = (int) ((i * 100.0f) / total);
+                        if (percent != lastLoggedPercent && percent % 10 == 0) {
+                            Log.e("AccelWriter", System.currentTimeMillis()+" Progress: " + percent + "%");
+                            lastLoggedPercent = percent;
+                        }
                     }
                     outfile.flush();
                     outfile.close();
 
                     file = new File(dir, fname+"-gyro.txt");
                     outfile = new BufferedWriter(new FileWriter(file,false));
+                    total = Constants.gyrox.size();
+                    lastLoggedPercent = -1;
                     for (int i = 0; i < Constants.gyrox.size(); i++) {
                         outfile.append(Constants.gyrox.get(i)+","+Constants.gyroy.get(i)+","+Constants.gyroz.get(i));
                         outfile.newLine();
+                        int percent = (int) ((i * 100.0f) / total);
+                        if (percent != lastLoggedPercent && percent % 10 == 0) {
+                            Log.e("GyroWriter", System.currentTimeMillis()+" Progress: " + percent + "%");
+                            lastLoggedPercent = percent;
+                        }
                     }
                     outfile.flush();
                     outfile.close();
