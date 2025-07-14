@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import android.os.CountDownTimer;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     static {
         System.loadLibrary("native-lib");
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         av = this;
         tv = (TextView)findViewById(R.id.textView1);
         countdownField = (TextView)findViewById(R.id.textView4);
+        Constants.statusField=(TextView)findViewById(R.id.textView5);
 
         Constants.lineChart_imu = (LineChart)findViewById(R.id.linechart_imu);
         Constants.lineChart_mic = (LineChart)findViewById(R.id.linechart_mic);

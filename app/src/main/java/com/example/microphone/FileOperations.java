@@ -3,6 +3,7 @@ package com.example.microphone;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -64,12 +65,27 @@ public class FileOperations {
                     Log.e("ex", "writeRecToDisk");
                     Log.e("ex", e.getMessage());
                 }
+                Toast.makeText(av, "Saved successfully", Toast.LENGTH_LONG).show();
+
+                av.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Constants.statusField.setText("finish write");
+                    }
+                });
             }
         }).run();
     }
 
     public static void writeToDisk(Context cxt, String fname) {
         Log.e("asdf","file io");
+        ((Activity)cxt).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Constants.statusField.setText("start write");
+            }
+        });
+
         new Thread(new Runnable() {
             @Override
             public void run() {
