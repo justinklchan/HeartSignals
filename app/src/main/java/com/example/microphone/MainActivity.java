@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 lineDataY=new ArrayList<>();
                 lineDataZ=new ArrayList<>();
                 fname=System.currentTimeMillis()+"";
+                Constants.statusField.setText("");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
