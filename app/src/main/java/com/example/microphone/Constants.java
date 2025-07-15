@@ -15,9 +15,11 @@ public class Constants {
     static LineChart lineChart_imu,lineChart_mic;
     static short[] samples;
     static short[] temp;
+    static ArrayList<Long> acc_ts;
     static ArrayList<Float> accx;
     static ArrayList<Float> accy;
     static ArrayList<Float> accz;
+    static ArrayList<Long> gyro_ts;
     static ArrayList<Float> gyrox;
     static ArrayList<Float> gyroy;
     static ArrayList<Float> gyroz;

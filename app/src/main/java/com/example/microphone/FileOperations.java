@@ -26,7 +26,7 @@ public class FileOperations {
                     int total = Constants.accx.size();
                     int lastLoggedPercent = -1;
                     for (int i = 0; i < Constants.accx.size(); i++) {
-                        outfile.append(Constants.accx.get(i)+","+Constants.accy.get(i)+","+Constants.accz.get(i));
+                        outfile.append(Constants.acc_ts.get(i)+","+Constants.accx.get(i)+","+Constants.accy.get(i)+","+Constants.accz.get(i));
                         outfile.newLine();
                         int percent = (int) ((i * 100.0f) / total);
                         if (percent != lastLoggedPercent && percent % 10 == 0) {
@@ -42,7 +42,7 @@ public class FileOperations {
                     total = Constants.gyrox.size();
                     lastLoggedPercent = -1;
                     for (int i = 0; i < Constants.gyrox.size(); i++) {
-                        outfile.append(Constants.gyrox.get(i)+","+Constants.gyroy.get(i)+","+Constants.gyroz.get(i));
+                        outfile.append(Constants.gyro_ts.get(i)+","+Constants.gyrox.get(i)+","+Constants.gyroy.get(i)+","+Constants.gyroz.get(i));
                         outfile.newLine();
                         int percent = (int) ((i * 100.0f) / total);
                         if (percent != lastLoggedPercent && percent % 10 == 0) {

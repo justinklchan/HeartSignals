@@ -94,9 +94,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 String s = Constants.lengthEt.getText().toString();
                 int size = 500*Integer.parseInt(s);
+                Constants.acc_ts=new ArrayList<>(size);
                 Constants.accx=new ArrayList<>(size);
                 Constants.accy=new ArrayList<>(size);
                 Constants.accz=new ArrayList<>(size);
+                Constants.gyro_ts=new ArrayList<>(size);
                 Constants.gyrox=new ArrayList<>(size);
                 Constants.gyroy=new ArrayList<>(size);
                 Constants.gyroz=new ArrayList<>(size);
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 float x = sensorEvent.values[0];
                 float y = sensorEvent.values[1];
                 float z = sensorEvent.values[2];
+                Constants.acc_ts.add(System.currentTimeMillis());
                 Constants.accx.add(x);
                 Constants.accy.add(y);
                 Constants.accz.add(z);
@@ -239,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 float x = sensorEvent.values[0];
                 float y = sensorEvent.values[1];
                 float z = sensorEvent.values[2];
+                Constants.gyro_ts.add(System.currentTimeMillis());
                 Constants.gyrox.add(x);
                 Constants.gyroy.add(y);
                 Constants.gyroz.add(z);
