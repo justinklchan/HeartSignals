@@ -95,7 +95,7 @@ public class FileOperations {
                     if (!path.exists()) {
                         path.mkdirs();
                     }
-                    File file = new File(dir, fname+".txt");
+                    File file = new File(dir, fname+"-pcg.txt");
                     BufferedWriter outfile = new BufferedWriter(new FileWriter(file,false));
                     for (Short s : Constants.samples) {
                         outfile.append(s+"");
