@@ -107,6 +107,12 @@ public class FileOperations {
                     Log.e("ex", "writeRecToDisk");
                     Log.e("ex", e.getMessage());
                 }
+                ((Activity)cxt).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Constants.statusField.setText("finish write");
+                    }
+                });
             }
         }).run();
     }
