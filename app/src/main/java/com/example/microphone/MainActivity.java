@@ -17,6 +17,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -29,9 +30,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.CountDownTimer;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -70,8 +74,40 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Constants.lineChart_mic = (LineChart)findViewById(R.id.linechart_mic);
         Constants.startButton = (Button)findViewById(R.id.button);
         Constants.stopButton = (Button)findViewById(R.id.button2);
+        Constants.checkButton = (Button)findViewById(R.id.button3);
         Constants.startButton.setEnabled(true);
         Constants.stopButton.setEnabled(false);
+        Constants.checkButton.setEnabled(true);
+        Constants.checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File dirFile = new File(getExternalFilesDir(null).toString());
+                File[] files = dirFile.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File pathname) {
+                        return pathname.isFile() && pathname.getName().toLowerCase().contains("pcg");
+                    }
+                });
+
+                if (files != null && files.length > 0) {
+                    File mostRecent = files[0];
+                    for (int i = 1; i < files.length; i++) {
+                        if (files[i].lastModified() > mostRecent.lastModified()) {
+                            mostRecent = files[i];
+                        }
+                    }
+
+                    long sizeInBytes = mostRecent.length();
+                    double sizeInMB = sizeInBytes / (1024.0 * 1024.0);
+                    Log.e("FileInfo", mostRecent.getName() +
+                            ", Size: " + String.format("%.2f", sizeInMB) + " MB");
+                    Toast.makeText(av, mostRecent.getName() +
+                            ", Size: " + String.format("%.2f", sizeInMB) + " MB", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("FileInfo", "No matching files found.");
+                }
+            }
+        });
         Constants.startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
