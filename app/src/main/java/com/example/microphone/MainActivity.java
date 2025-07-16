@@ -50,11 +50,51 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int length = 0;
     Worker task;
     Activity av;
-    TextView tv,countdownField;
+    TextView tv,countdownField,fileField;
     int counter = 0;
     String fname = "";
     Vibrator vibrator;
     CountDownTimer ttimer;
+
+    public void findMostRecentFiles(Context cxt) {
+        File dirFile = cxt.getExternalFilesDir(null);
+        if (dirFile == null || !dirFile.exists()) {
+            Log.d("FileInfo", "Directory does not exist.");
+            return;
+        }
+
+        String a = findAndLogMostRecentFile(dirFile, "pcg");
+        String b = findAndLogMostRecentFile(dirFile, "acc");
+        String c = findAndLogMostRecentFile(dirFile, "gyro");
+        fileField.setText(a+b+c);
+    }
+
+    private String findAndLogMostRecentFile(File dir, String keyword) {
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isFile() && pathname.getName().toLowerCase().contains(keyword.toLowerCase());
+            }
+        });
+
+        if (files != null && files.length > 0) {
+            File mostRecent = files[0];
+            for (int i = 1; i < files.length; i++) {
+                if (files[i].lastModified() > mostRecent.lastModified()) {
+                    mostRecent = files[i];
+                }
+            }
+
+            long sizeInBytes = mostRecent.length();
+            double sizeInMB = sizeInBytes / (1024.0 * 1024.0);
+            return mostRecent.getName() + ", Size: " + String.format("%.2f", sizeInMB) + " MB\n";
+        } else {
+//            Log.d("FileInfo", "No '" + keyword + "' files found.");
+        }
+        return "";
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         av = this;
         tv = (TextView)findViewById(R.id.textView1);
         countdownField = (TextView)findViewById(R.id.textView4);
+        fileField = (TextView)findViewById(R.id.textView7);
         Constants.statusField=(TextView)findViewById(R.id.textView5);
 
         Constants.lineChart_imu = (LineChart)findViewById(R.id.linechart_imu);
@@ -81,31 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Constants.checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File dirFile = new File(getExternalFilesDir(null).toString());
-                File[] files = dirFile.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File pathname) {
-                        return pathname.isFile() && pathname.getName().toLowerCase().contains("pcg");
-                    }
-                });
-
-                if (files != null && files.length > 0) {
-                    File mostRecent = files[0];
-                    for (int i = 1; i < files.length; i++) {
-                        if (files[i].lastModified() > mostRecent.lastModified()) {
-                            mostRecent = files[i];
-                        }
-                    }
-
-                    long sizeInBytes = mostRecent.length();
-                    double sizeInMB = sizeInBytes / (1024.0 * 1024.0);
-                    Log.e("FileInfo", mostRecent.getName() +
-                            ", Size: " + String.format("%.2f", sizeInMB) + " MB");
-                    Toast.makeText(av, mostRecent.getName() +
-                            ", Size: " + String.format("%.2f", sizeInMB) + " MB", Toast.LENGTH_LONG).show();
-                } else {
-                    Log.e("FileInfo", "No matching files found.");
-                }
+                findMostRecentFiles(av);
             }
         });
         Constants.startButton.setOnClickListener(new View.OnClickListener() {
